@@ -3,8 +3,8 @@ Hi it's Brijesh here.
 To run this application please follow the steps listed below: 
 
 1. python -m venv venv - run this command (creates a virtual environment).
-
-2. venv\Scripts\activate -  run this command (activates virtual environment).
+venv\Scripts\activate
+2.  -  run this command (activates virtual environment).
 
 3. pip install -r requirements.txt -  run this command(install's dependencies).
 
