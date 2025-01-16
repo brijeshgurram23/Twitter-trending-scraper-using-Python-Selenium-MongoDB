@@ -18,7 +18,8 @@ import threading
 PROXYMESH_URL = "http://Brijesh23:michaeljordan23@us-ca.proxymesh.com:31280"
 
 # client = MongoClient('mongodb://localhost:27017/')
-client = MongoClient('mongodb+srv://brijeshgurram910:brijeshgurram910@brijesh23.nbus32j.mongodb.net/?retryWrites=true&w=majority&appName=brijesh23')
+MONGO_URL = 'mongodb+srv://brijeshgurram910:brijeshgurram910@brijesh23.nbus32j.mongodb.net/?retryWrites=true&w=majority&appName=brijesh23'
+client = MongoClient(MONGO_URL)
 
 db = client['twitter_trends']
 collection = db['trending_topics']
