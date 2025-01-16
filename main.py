@@ -26,6 +26,8 @@ collection = db['trending_topics']
 
 def get_driver():
     options = webdriver.ChromeOptions()
+    options.add_argument("--headless")  # Run Chrome in headless mode (without UI)
+
     # options.add_argument(f'--proxy-server={PROXYMESH_URL}')
     options.headless = False
     driver = webdriver.Chrome(options=options)
