@@ -15,7 +15,7 @@ from flask import Flask, render_template, jsonify
 import threading
 
 
-PROXYMESH_URL = "http://Brijesh23:michaeljordan23@us-ca.proxymesh.com:31280"
+PROXYMESH_URL = "http://Brijesh23:michaeljordan23@open.proxymesh.com:31280"
 
 # client = MongoClient('mongodb://localhost:27017/')
 MONGO_URL = 'mongodb+srv://brijeshgurram910:brijeshgurram910@brijesh23.nbus32j.mongodb.net/?retryWrites=true&w=majority&appName=brijesh23'
@@ -26,8 +26,7 @@ collection = db['trending_topics']
 
 def get_driver():
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")  # Run Chrome in headless mode (without UI)
-
+    # options.add_argument("--headless")  # Run Chrome in headless mode (without UI)
     # options.add_argument(f'--proxy-server={PROXYMESH_URL}')
     options.headless = False
     driver = webdriver.Chrome(options=options)
@@ -45,7 +44,12 @@ def login_to_twitter(driver, username, password):
     username_input.send_keys(Keys.RETURN)
     
     time.sleep(2) 
-    
+
+    # email_input = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@autocomplete='on']")))
+    # email_input.send_keys(email)
+    # email_input.send_keys(Keys.RETURN)
+
+    # time.sleep(2)
     password_input = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@autocomplete='current-password']")))
     
     password_input.send_keys(password)
@@ -58,6 +62,8 @@ def click_explore_button(driver):
             EC.element_to_be_clickable((By.XPATH, "//span[text()='Not now']"))
         )
         not_now_button.click()
+        
+        
     except TimeoutException:
         pass  
     
@@ -93,7 +99,7 @@ def save_to_mongodb(trends, ip):
         "trend3": trends[2] if len(trends) > 2 else None,
         "trend4": trends[3] if len(trends) > 3 else None,
         "trend5": trends[4] if len(trends) > 4 else None,
-        "datetime": datetime.now(),
+        "date": datetime.now(),
         "ip_address": ip
     }
     collection.insert_one(data)
@@ -127,6 +133,8 @@ def index():
 def run_script():
     TWITTER_USERNAME = "BrijeshGurram"
     TWITTER_PASSWORD = "michaeljordan23"
+    # TWITTER_EMAIL = "brijeshgurram910@gmail.com"
+
     result = main(TWITTER_USERNAME, TWITTER_PASSWORD)
     return jsonify(result)
 
