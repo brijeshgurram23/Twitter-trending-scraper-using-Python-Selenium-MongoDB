@@ -26,10 +26,10 @@ collection = db['trending_topics']
 
 def get_driver():
     options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--headless")  # Run Chrome in headless mode (without UI)
     # options.add_argument(f'--proxy-server={PROXYMESH_URL}')
     options.headless = False
     driver = webdriver.Chrome(options=options)
@@ -163,4 +163,6 @@ def run_script():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
