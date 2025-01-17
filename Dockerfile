@@ -4,9 +4,6 @@ FROM python:3.10
 # Set the working directory
 WORKDIR /app
 
-# Copy requirements file to the container
-COPY requirements.txt /app/requirements.txt
-
 # Install system dependencies, Chrome, and ChromeDriver
 RUN apt-get update && apt-get install -y \
     wget \
@@ -21,7 +18,7 @@ RUN apt-get update && apt-get install -y \
     # Download and install ChromeDriver
     CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9.]+' | head -1) && \
     CHROMEDRIVER_VERSION=$(curl -sSL https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION) && \
-    wget -q "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" -O chromedriver.zip && \
+    curl -q "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" -O chromedriver.zip && \
     unzip chromedriver.zip -d /usr/local/bin/ && \
     chmod +x /usr/local/bin/chromedriver && \
     rm chromedriver.zip && \
@@ -29,7 +26,11 @@ RUN apt-get update && apt-get install -y \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Copy the .env file into the Docker image
+COPY .env /app/.env
+
 # Upgrade pip and install Python dependencies
+COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
 
