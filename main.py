@@ -29,7 +29,7 @@ def get_driver():
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    # options.add_argument("--headless")  # Run Chrome in headless mode (without UI)
+    options.add_argument("--headless")  # Run Chrome in headless mode (without UI)
     # options.add_argument(f'--proxy-server={PROXYMESH_URL}')
     options.headless = False
     driver = webdriver.Chrome(options=options)
@@ -110,17 +110,32 @@ def save_to_mongodb(trends, ip):
 
 
 def main(username, password):
+    app.logger.info("Initializing WebDriver.")
     driver = get_driver()
     try:
+        app.logger.info("Logging into Twitter.")
         login_to_twitter(driver, username, password)
+
+        app.logger.info("Navigating to explore section.")
         click_explore_button(driver)
 
+        app.logger.info("Fetching trending topics.")
         trends = get_trending_topics(driver)
+
+        app.logger.info("Getting IP address.")
         ip = requests.get('https://api.ipify.org').text
+
+        app.logger.info("Saving trends to MongoDB.")
         result = save_to_mongodb(trends, ip)
+
+        app.logger.info(f"Process completed. Result: {result}")
+    except Exception as e:
+        app.logger.error(f"Error in main function: {e}", exc_info=True)
+        raise
     finally:
         driver.quit()
     return result
+
 
 
 
@@ -138,10 +153,14 @@ def run_script():
     TWITTER_USERNAME = "BrijeshGurram"
     TWITTER_PASSWORD = "michaeljordan23"
     try:
+        app.logger.info("Starting the main script.")
         result = main(TWITTER_USERNAME, TWITTER_PASSWORD)
+        app.logger.info(f"Script completed successfully. Result: {result}")
         return jsonify(result)
     except Exception as e:
+        app.logger.error(f"Error in /run-script: {e}", exc_info=True)
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
