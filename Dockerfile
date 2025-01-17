@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y wget unzip && \
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
 
+EXPOSE 5000
+
 # Copy the rest of the application code
 COPY . /app
 
