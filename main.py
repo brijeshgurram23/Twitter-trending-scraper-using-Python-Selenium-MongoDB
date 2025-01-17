@@ -13,15 +13,12 @@ import requests
 from selenium import *
 from flask import Flask, render_template, jsonify
 import threading
-from dotenv import load_dotenv
-import os
-load_dotenv()  # Load environment variables from .env file
 
 
-# PROXYMESH_URL = "http://Brijesh23:michaeljordan23@us-ca.proxymesh.com:31280"
+PROXYMESH_URL = "http://Brijesh23:michaeljordan23@us-ca.proxymesh.com:31280"
 
 # client = MongoClient('mongodb://localhost:27017/')
-MONGO_URL = os.environ.get("MONGO_URL")
+MONGO_URL = 'mongodb+srv://brijeshgurram910:brijeshgurram910@brijesh23.nbus32j.mongodb.net/?retryWrites=true&w=majority&appName=brijesh23'
 client = MongoClient(MONGO_URL)
 
 db = client['twitter_trends']
@@ -153,8 +150,8 @@ def index():
 
 @app.route("/run-script")
 def run_script():
-    TWITTER_USERNAME = os.environ.get("TWITTER_USERNAME")
-    TWITTER_PASSWORD = os.environ.get("TWITTER_PASSWORD")
+    TWITTER_USERNAME = "BrijeshGurram"
+    TWITTER_PASSWORD = "michaeljordan23"
     try:
         app.logger.info("Starting the main script.")
         result = main(TWITTER_USERNAME, TWITTER_PASSWORD)
