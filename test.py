@@ -7,7 +7,7 @@ def get_trending_topics():
     driver = webdriver.Chrome(options=options)
 
     driver.get('https://twitter.com/home')
-    time.sleep(3)  
+    time.sleep(2)  
 
     trends = []
     for i in range(3, 13):

@@ -15,7 +15,7 @@ from flask import Flask, render_template, jsonify
 import threading
 
 
-PROXYMESH_URL = "http://Brijesh23:michaeljordan23@open.proxymesh.com:31280"
+PROXYMESH_URL = "http://Brijesh23:michaeljordan23@us-ca.proxymesh.com:31280"
 
 # client = MongoClient('mongodb://localhost:27017/')
 MONGO_URL = 'mongodb+srv://brijeshgurram910:brijeshgurram910@brijesh23.nbus32j.mongodb.net/?retryWrites=true&w=majority&appName=brijesh23'
@@ -26,6 +26,9 @@ collection = db['trending_topics']
 
 def get_driver():
     options = webdriver.ChromeOptions()
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     # options.add_argument("--headless")  # Run Chrome in headless mode (without UI)
     # options.add_argument(f'--proxy-server={PROXYMESH_URL}')
     options.headless = False
@@ -34,9 +37,9 @@ def get_driver():
 
 def login_to_twitter(driver, username, password):
     driver.get("https://twitter.com/login")
-    time.sleep(2)
+    time.sleep(5)
 
-    wait = WebDriverWait(driver, 20)
+    wait = WebDriverWait(driver, 10)
     
     username_input = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@autocomplete='username']")))
     
@@ -125,18 +128,20 @@ def main(username, password):
 
 app = Flask(__name__,template_folder='templates')
 
-@app.route('/')
-def index():
-    return render_template('index.html')
 
-@app.route('/run-script')
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/run-script")
 def run_script():
     TWITTER_USERNAME = "BrijeshGurram"
     TWITTER_PASSWORD = "michaeljordan23"
-    # TWITTER_EMAIL = "brijeshgurram910@gmail.com"
+    try:
+        result = main(TWITTER_USERNAME, TWITTER_PASSWORD)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-    result = main(TWITTER_USERNAME, TWITTER_PASSWORD)
-    return jsonify(result)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
