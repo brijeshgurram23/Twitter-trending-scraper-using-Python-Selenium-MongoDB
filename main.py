@@ -26,10 +26,6 @@ collection = db['trending_topics']
 
 def get_driver():
     options = webdriver.ChromeOptions()
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    # options.add_argument("--headless")  # Run Chrome in headless mode (without UI)
     # options.add_argument(f'--proxy-server={PROXYMESH_URL}')
     options.headless = False
     driver = webdriver.Chrome(options=options)
@@ -135,10 +131,6 @@ def main(username, password):
     finally:
         driver.quit()
     return result
-
-
-
-
 
 
 app = Flask(__name__,template_folder='templates')
